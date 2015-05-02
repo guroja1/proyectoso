@@ -1,0 +1,2 @@
+# proyectoso
+Proyecto Sistemas Operativos
