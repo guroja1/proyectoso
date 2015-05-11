@@ -1,6 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include <math.c>
+#include <math.h>
 
 int TLB[8][9]; //Define el TLB
 
@@ -31,8 +31,9 @@ void cargaTLB() {
 void referenciaTLB(int c) {
   int i,j;
   int FP = 0;
-  int cont = 0;
-  int cont2 = 100000;
+  int sum = 100000;
+  int sum2 = 0;
+  int pos;
 
   for (j=7; j>0; j--) {
        for (i=0; i<8; i++) {
@@ -51,11 +52,23 @@ void referenciaTLB(int c) {
   //Hay un Fallo de página, se debe sustituir una página
   if (FP == 0) {
      for (i = 0; i < 8; i++) {
-        for (j = 7; j > 1; j--) {
-           cont += pow(TLB[i][j], 7 - i);
-           cont2 += pow(TLB[i][j], 7 - i);
+        for (j = 8; j > 1; j--) {
+			if (TLB[i][j] == 1) {
+           sum2 += pow((TLB[i][j] + 1), (8 - j));
+	   }
         }
+        //printf("SUMA: %d POS: %d || ", sum2, i);
+        if (sum2 < sum) {
+			sum = sum2;
+			pos = i;
+		}
+		sum2 = 0;
      }
+     TLB[pos][0] = c;
+     TLB[pos][1] = 1;
+     for (i = 2; i < 0; i++){
+		 TLB[pos][i] = 0;
+	 }
   }
 }
 
